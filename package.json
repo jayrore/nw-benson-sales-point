@@ -1,6 +1,6 @@
 {
   "name": "nw-benson-sales-point",
-  "version": "0.0.3",
+  "version": "1.0.0-0",
   "description": "desktop app to master the art of sales bubble gum",
   "main": "views/index.html",
   "scripts": {
