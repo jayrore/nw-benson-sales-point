@@ -1,0 +1,37 @@
+{
+  "name": "nw-benson-sales-point",
+  "version": "0.0.1",
+  "description": "desktop app to master the art of sales bubble gum",
+  "main": "views/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayrore/nw-benson-sales-point.git"
+  },
+  "keywords": [
+    "sales",
+    "point",
+    "bubble",
+    "gum",
+    "powerpuff-girls",
+    "node",
+    "web-kit",
+    "nw",
+    "mongo",
+    "mongoose"
+  ],
+  "author": "[\"el jayro\", \"Kike\"]",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jayrore/nw-benson-sales-point/issues"
+  },
+  "homepage": "https://github.com/jayrore/nw-benson-sales-point#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.5",
+    "jade": "^1.11.0",
+    "jquery": "^2.1.4",
+    "react": "^0.13.3"
+  }
+}
