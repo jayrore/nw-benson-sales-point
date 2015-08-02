@@ -15,4 +15,8 @@ var fn = jade.compileFile('./templates/index.jade', {});
 
 // Render the function
 var html = fn(locals);
-	$('#main').html(html);
+$('#main').html(html);
+
+var ticketFn = jade.compileFile('templates/ticket.jade', {});
+var ticket = ticketFn();
+$('#main').append(ticket);

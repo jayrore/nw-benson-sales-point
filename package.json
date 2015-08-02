@@ -4,7 +4,7 @@
   "description": "desktop app to master the art of sales bubble gum",
   "main": "index.html",
   "scripts": {
-    "start": "nw" 
+    "start": "nw"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "bootstrap": "^3.3.5",
     "jade": "^1.11.0",
     "jquery": "^2.1.4",
+    "mongoose": "^4.1.0",
     "react": "^0.13.3"
   }
 }
