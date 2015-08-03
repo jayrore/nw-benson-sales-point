@@ -38,15 +38,27 @@ var ToolBar = React.createClass({
     }
 });
 
-var SectionCenter = React.createClass({
-    displayName: "SectionCenter",
+var StoreSection = React.createClass({
+    displayName: "StoreSection",
     render: function() {
         return( 
         	<div className="jumbotron">
-    			<h1>{this.props.viewContent}</h1>
+    			<h1>StoreSection</h1>
     		</div>);
     }
 });
+
+var UsersSection = React.createClass({
+    displayName: "UsersSection",
+    render: function() {
+        return( 
+        	<div className="jumbotron">
+    			<h1>UsersSection</h1>
+    		</div>);
+    }
+});
+
+
 
 
 /**
@@ -54,6 +66,10 @@ var SectionCenter = React.createClass({
  */
 module.exports.Store = React.createClass({
     displayName: "Store",
+    storeModules:{
+    	store : StoreSection,
+    	users : UsersSection
+    },
     getInitialState: function() {
        return {
             viewContent: 'store'
@@ -65,14 +81,17 @@ module.exports.Store = React.createClass({
         });
     },
     render: function() {
+    	var storeModule = this.storeModules[this.state.viewContent] || this.storeModules['store'];
         return( 
         	<div className="row">
+        		// Tool bar
 		 		<div className="col-xs-10 col-xs-offset-1" >
 		 			<ToolBar options={this.props.options} onUserInput={this.handleUserInput}/>
 		 		</div>
+		 		// Main content
 		 		<div className="row">
-		 			<div className="col-xs-6 col-xs-offset-3">
-		 				<SectionCenter viewContent={this.state.viewContent}></SectionCenter>
+		 			<div className="col-xs-12">
+		 				{React.createElement(storeModule)}
 		 			</div>
 		 		</div>
 		 	</div>
