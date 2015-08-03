@@ -1,17 +1,13 @@
 var React = require('react');
 var Components = require('./Components.js');
-
-
-var ToolBar = Components.ToolBar;
-
-var toolBar = ["Punto de venta","Usuarios","Mercancia","Ventas"];
-
+var config = require('../config.js').config;
+var Store = Components.Store;
 /**
  * Store React app view 
  * @return {function} this is the store main page
  */
 module.exports = function(){
-	
-  React.render(<ToolBar options={toolBar} name="kittu"/>, document.getElementById('main-head'));
+
+	React.render(<Store options={config.toolBarItems}/>,document.getElementById('main'))
 
 };

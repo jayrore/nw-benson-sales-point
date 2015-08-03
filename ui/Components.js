@@ -1,6 +1,13 @@
 var React = require('react');
 var _ = require('underscore');
 
+/*
+    Section Components
+ */
+
+var UsersComponent = require('./UsersComponent.js');
+console.log(UsersComponent);
+
 /**
  * React menu option
  */
@@ -27,7 +34,6 @@ var ToolBar = React.createClass({
     	console.log(this.props);
     	var _this = this;
         return( 
-
     			<ul className="nav nav-pills" >
     				{	
     					this.props.options.map(function(name){
@@ -48,18 +54,6 @@ var StoreSection = React.createClass({
     }
 });
 
-var UsersSection = React.createClass({
-    displayName: "UsersSection",
-    render: function() {
-        return( 
-        	<div className="jumbotron">
-    			<h1>UsersSection</h1>
-    		</div>);
-    }
-});
-
-
-
 
 /**
  * React menu bar componet
@@ -68,7 +62,7 @@ module.exports.Store = React.createClass({
     displayName: "Store",
     storeModules:{
     	store : StoreSection,
-    	users : UsersSection
+    	users : UsersComponent
     },
     getInitialState: function() {
        return {
@@ -84,11 +78,9 @@ module.exports.Store = React.createClass({
     	var storeModule = this.storeModules[this.state.viewContent] || this.storeModules['store'];
         return( 
         	<div className="row">
-        		// Tool bar
 		 		<div className="col-xs-10 col-xs-offset-1" >
 		 			<ToolBar options={this.props.options} onUserInput={this.handleUserInput}/>
 		 		</div>
-		 		// Main content
 		 		<div className="row">
 		 			<div className="col-xs-12">
 		 				{React.createElement(storeModule)}

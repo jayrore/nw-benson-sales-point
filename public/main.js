@@ -2,17 +2,21 @@ var config = require('./config.js').config;
 var jade = require('jade');
 var $ = require('jquery');
 var mongoose = require('mongoose');
-console.log(config);
+var UserModel = require('./models/Users.js');
+
+mongoose.connect(config.mongo.getConnectionString());
 
 var locals = {
 	title : config.storeName
 };
 
-var db = mongoose.createConnection(config.mongo.getConnectionString());
+
 
 // Compile a function
-var fn = jade.compileFile('./templates/index.jade', {});
+var fn = jade.compileFile('./templates/main.jade', {});
 
 // Render the function
 var html = fn(locals);
+$(function() {
 	$('#main').html(html);
+});

@@ -4,7 +4,8 @@
   "description": "desktop app to master the art of sales bubble gum",
   "main": "index.html",
   "scripts": {
-    "start": "nw" 
+    "start": "nw",
+    "react-watch": "watchify -t reactify ./ui/store.js -o ./public/store.js -s store -v"
   },
   "repository": {
     "type": "git",
@@ -29,9 +30,18 @@
   },
   "homepage": "https://github.com/jayrore/nw-benson-sales-point#readme",
   "dependencies": {
-    "bootstrap": "^3.3.5",
-    "jade": "^1.11.0",
-    "jquery": "^2.1.4",
-    "react": "^0.13.3"
+    "async": "1.4.0",
+    "bootstrap": "3.3.5",
+    "jade": "1.11.0",
+    "jquery": "2.1.4",
+    "react": "0.13.3",
+    "startbootstrap-sb-admin-2": "1.0.7",
+    "underscore": "1.8.3"
+  },
+  "devDependencies": {
+    "reactify": "^1.1.1"
+  },
+  "window": {
+    "toolbar": true
   }
 }
