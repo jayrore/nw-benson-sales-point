@@ -25022,7 +25022,7 @@ ngdi.module('benson-sales-point', [])
   //registering stores
   .factory('userStore', require('./stores/userStore'))
   //registering models
-  .factory('UserModel', require('./models/userModel'))
+  .factory('userModel', require('./models/userModel'))
   //registering ui components
   .factory('Store', require('./ui/store'))
   .factory('User', require('./ui/user'))
@@ -25044,7 +25044,7 @@ module.exports = model;
 model.$inject = ['mongoose'];
 
 function model(mongoose){
-  var Schema = window.mongoose.Schema;
+  var Schema = mongoose.Schema;
 
   var userSchema = new Schema({
     name:  String,
@@ -25054,7 +25054,22 @@ function model(mongoose){
 
   var UserModel = window.mongoose.model("User",userSchema);
 
-  return UserModel;
+  return {
+    getUsers: getUsers,
+    addUser: addUser
+  }
+
+  function getUsers(){
+    return UserModel.find({});
+  };
+
+  function addUser(userName, userPassword){
+    var User = new UserModel({name:userName, password: userPassword});
+      User.save(function (err) {
+        if (err) // ...
+        console.log('error!!', err);
+      });
+  };
 }
 
 },{}],189:[function(require,module,exports){
@@ -25204,14 +25219,14 @@ function storeCompoment(React, _, User){
 'use strict';
 
 module.exports = userComponent;
-userComponent.$inject = ['React', 'UserModel']
+userComponent.$inject = ['React', 'userModel']
 
 
-function userComponent(React, UserModel){
+function userComponent(React, userModel){
   var NewUserForm = React.createClass({
   	displayName:"NewUserForm",
   	clickHandler: function(){
-  		addUser(this.refs.userName.getDOMNode().value, this.refs.userPassword.getDOMNode().value);
+  		userModel.addUser(this.refs.userName.getDOMNode().value, this.refs.userPassword.getDOMNode().value);
   	},
   	render: function(){
   		return(
@@ -25241,25 +25256,13 @@ function userComponent(React, UserModel){
   	}
   });
 
-  function getUsers(){
-  	return UserModel.find({});
-  };
-
-  function addUser(userName, userPassword){
-  	var User = new UserModel({name:userName, password: userPassword});
-  		User.save(function (err) {
-  		  if (err) // ...
-  		  console.log('shit!!', err);
-  		});
-  };
-
   return React.createClass({
     displayName: "UsersSection",
     getInitialState: function() {
     	return {users: []};
   	},
     componentDidMount: function() {
-    	var usuarios = getUsers();
+    	var usuarios = userModel.getUsers();
     	console.log('usuarios',usuarios);
     	usuarios.exec(function(error, users){
     		this.setState({users: users});

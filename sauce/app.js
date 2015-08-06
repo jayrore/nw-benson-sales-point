@@ -9,7 +9,7 @@ ngdi.module('benson-sales-point', [])
   //registering stores
   .factory('userStore', require('./stores/userStore'))
   //registering models
-  .factory('UserModel', require('./models/userModel'))
+  .factory('userModel', require('./models/userModel'))
   //registering ui components
   .factory('Store', require('./ui/store'))
   .factory('User', require('./ui/user'))

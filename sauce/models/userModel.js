@@ -4,7 +4,7 @@ module.exports = model;
 model.$inject = ['mongoose'];
 
 function model(mongoose){
-  var Schema = window.mongoose.Schema;
+  var Schema = mongoose.Schema;
 
   var userSchema = new Schema({
     name:  String,
@@ -14,5 +14,20 @@ function model(mongoose){
 
   var UserModel = window.mongoose.model("User",userSchema);
 
-  return UserModel;
+  return {
+    getUsers: getUsers,
+    addUser: addUser
+  }
+
+  function getUsers(){
+    return UserModel.find({});
+  };
+
+  function addUser(userName, userPassword){
+    var User = new UserModel({name:userName, password: userPassword});
+      User.save(function (err) {
+        if (err) // ...
+        console.log('error!!', err);
+      });
+  };
 }
