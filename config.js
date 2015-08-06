@@ -10,6 +10,6 @@ module.exports.config = {
 	toolBarItems:["store","users","merchandise","sales","options","otro"]
 };
 
-function getConnectionString(){
+function getConnectionString() {
 	return this.protocol + this.host + this.port + this.db;
 };

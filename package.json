@@ -5,7 +5,8 @@
   "main": "index.html",
   "scripts": {
     "start": "nw",
-    "react-watch": "watchify -t reactify ./ui/store.js -o ./public/store.js -s store -v"
+    "build": "browserify -t reactify -r fluxtore ./sauce/app.js > ./public/bundle.js",
+    "watch": "watchify -t reactify -r fluxtore ./sauce/app.js -o ./public/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -28,20 +29,24 @@
   "bugs": {
     "url": "https://github.com/jayrore/nw-benson-sales-point/issues"
   },
+  "window": {
+    "toolbar": true
+  },
+  "user-agent": "%name NodeWebKit",
   "homepage": "https://github.com/jayrore/nw-benson-sales-point#readme",
   "dependencies": {
     "async": "1.4.0",
     "bootstrap": "3.3.5",
+    "fluxtore": "0.0.6",
     "jade": "1.11.0",
     "jquery": "2.1.4",
+    "ng-di": "^0.1.1",
     "react": "0.13.3",
     "startbootstrap-sb-admin-2": "1.0.7",
     "underscore": "1.8.3"
   },
   "devDependencies": {
-    "reactify": "^1.1.1"
-  },
-  "window": {
-    "toolbar": true
+    "reactify": "^1.1.1",
+    "watchify": "^3.3.1"
   }
 }
