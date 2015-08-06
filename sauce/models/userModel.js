@@ -12,7 +12,7 @@ function model(mongoose){
     password: String
   });
 
-  var UserModel = window.mongoose.model("User",userSchema);
+  var UserModel = mongoose.model("User",userSchema);
 
   return {
     getUsers: getUsers,
