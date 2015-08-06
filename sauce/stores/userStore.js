@@ -1,28 +1,30 @@
 'use strict';
 
 module.exports = store;
-store.$inject = ['fluxtore', '_'];
+store.$inject = ['fluxtore', '_', 'userModel'];
 
-function store(fluxtore, _) {
-    var cache = [],
+function store(fluxtore, _, userModel) {
+    var cache,
         idSeed = 0,
         proxy;
 
     return proxy = fluxtore.createStore({
-        events: ['change'],
+        events: ['change', 'error'],
 
         getUsers: getUsers,
-
         actions: {
             addUser: addUser,
-
             removeUser: removeUser
         }
     });
 
-    function addUser(text) {
-        cache.push({ id: ++idSeed, text: text});
-        proxy.emitChange();
+    function addUser(user) {
+        userModel.addUser(user).then(function(user){
+          cache.push(user);
+          proxy.emitChange();
+        }, function(err){
+          proxy.emitError();
+        });
     }
 
     function removeUser(id) {
@@ -40,11 +42,15 @@ function store(fluxtore, _) {
         }
     }
 
-    function getUser() {
-        if (cache === null) {
-            //loadTodos();
-        }
-
-        return cache;
+    function getUsers() {
+      console.log('hi')
+      if (!cache) {
+          return userModel.getUsers().then(function(users){
+            cache = users;
+            return users;
+          });
+      }
+      console.log(cache);
+      return cache;
     }
 }

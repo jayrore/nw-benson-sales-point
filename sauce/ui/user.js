@@ -1,14 +1,14 @@
 'use strict';
 
 module.exports = userComponent;
-userComponent.$inject = ['React', 'userModel']
+userComponent.$inject = ['React', 'userStore']
 
 
-function userComponent(React, userModel){
+function userComponent(React, userStore){
   var NewUserForm = React.createClass({
   	displayName:"NewUserForm",
   	clickHandler: function(){
-  		userModel.addUser(this.refs.userName.getDOMNode().value, this.refs.userPassword.getDOMNode().value);
+  		userStore.addUser(this.refs.userName.getDOMNode().value, this.refs.userPassword.getDOMNode().value);
   	},
   	render: function(){
   		return(
@@ -44,14 +44,21 @@ function userComponent(React, userModel){
     	return {users: []};
   	},
     componentDidMount: function() {
-    	var usuarios = userModel.getUsers();
-    	console.log('usuarios',usuarios);
-    	usuarios.exec(function(error, users){
-    		this.setState({users: users});
-    		console.log("users",users);
-    		console.log("state", this.state);
-    	}.bind(this));
+      userStore.getUsers().then(function(users){
+        this.setState({users:users});
+      }.bind(this));
+      userStore.addChangeListener(this.onUsersChanged);
   	},
+
+    componentWillUnmount: function() {
+      userStore.removeChangeListener(this.onUsersChanged);
+    },
+
+    onUsersChanged: function(){
+      console.log('changed');
+      this.setState({users: userStore.getUsers()});
+    },
+
     render: function() {
         return(
         	<div className="col-xs-12">

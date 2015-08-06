@@ -20,14 +20,19 @@ function model(mongoose){
   }
 
   function getUsers(){
-    return UserModel.find({});
+    return UserModel.find({}).exec().then(function(users){
+      return users;
+    }, function(err){
+      return {error: err}
+    });
   };
 
   function addUser(userName, userPassword){
     var User = new UserModel({name:userName, password: userPassword});
-      User.save(function (err) {
-        if (err) // ...
-        console.log('error!!', err);
-      });
+    return User.save().then(function(user) {
+      return user;
+    }, function(err){
+      return {error: error };
+    });
   };
 }

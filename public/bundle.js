@@ -25060,15 +25060,20 @@ function model(mongoose){
   }
 
   function getUsers(){
-    return UserModel.find({});
+    return UserModel.find({}).exec().then(function(users){
+      return users;
+    }, function(err){
+      return {error: err}
+    });
   };
 
   function addUser(userName, userPassword){
     var User = new UserModel({name:userName, password: userPassword});
-      User.save(function (err) {
-        if (err) // ...
-        console.log('error!!', err);
-      });
+    return User.save().then(function(user) {
+      return user;
+    }, function(err){
+      return {error: error };
+    });
   };
 }
 
@@ -25076,28 +25081,30 @@ function model(mongoose){
 'use strict';
 
 module.exports = store;
-store.$inject = ['fluxtore', '_'];
+store.$inject = ['fluxtore', '_', 'userModel'];
 
-function store(fluxtore, _) {
-    var cache = [],
+function store(fluxtore, _, userModel) {
+    var cache,
         idSeed = 0,
         proxy;
 
     return proxy = fluxtore.createStore({
-        events: ['change'],
+        events: ['change', 'error'],
 
         getUsers: getUsers,
-
         actions: {
             addUser: addUser,
-
             removeUser: removeUser
         }
     });
 
-    function addUser(text) {
-        cache.push({ id: ++idSeed, text: text});
-        proxy.emitChange();
+    function addUser(user) {
+        userModel.addUser(user).then(function(user){
+          cache.push(user);
+          proxy.emitChange();
+        }, function(err){
+          proxy.emitError();
+        });
     }
 
     function removeUser(id) {
@@ -25115,12 +25122,16 @@ function store(fluxtore, _) {
         }
     }
 
-    function getUser() {
-        if (cache === null) {
-            //loadTodos();
-        }
-
-        return cache;
+    function getUsers() {
+      console.log('hi')
+      if (!cache) {
+          return userModel.getUsers().then(function(users){
+            cache = users;
+            return users;
+          });
+      }
+      console.log(cache);
+      return cache;
     }
 }
 
@@ -25219,14 +25230,14 @@ function storeCompoment(React, _, User){
 'use strict';
 
 module.exports = userComponent;
-userComponent.$inject = ['React', 'userModel']
+userComponent.$inject = ['React', 'userStore']
 
 
-function userComponent(React, userModel){
+function userComponent(React, userStore){
   var NewUserForm = React.createClass({
   	displayName:"NewUserForm",
   	clickHandler: function(){
-  		userModel.addUser(this.refs.userName.getDOMNode().value, this.refs.userPassword.getDOMNode().value);
+  		userStore.addUser(this.refs.userName.getDOMNode().value, this.refs.userPassword.getDOMNode().value);
   	},
   	render: function(){
   		return(
@@ -25262,14 +25273,21 @@ function userComponent(React, userModel){
     	return {users: []};
   	},
     componentDidMount: function() {
-    	var usuarios = userModel.getUsers();
-    	console.log('usuarios',usuarios);
-    	usuarios.exec(function(error, users){
-    		this.setState({users: users});
-    		console.log("users",users);
-    		console.log("state", this.state);
-    	}.bind(this));
+      userStore.getUsers().then(function(users){
+        this.setState({users:users});
+      }.bind(this));
+      userStore.addChangeListener(this.onUsersChanged);
   	},
+
+    componentWillUnmount: function() {
+      userStore.removeChangeListener(this.onUsersChanged);
+    },
+
+    onUsersChanged: function(){
+      console.log('changed');
+      this.setState({users: userStore.getUsers()});
+    },
+
     render: function() {
         return(
         	React.createElement("div", {className: "col-xs-12"}, 
